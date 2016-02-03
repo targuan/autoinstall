@@ -1,0 +1,9 @@
+lease_file: /var/lib/dhcp/dhcpd.leases
+binding:
+  http:
+    port: 8080
+    address: 0.0.0.0
+  tftp:
+    port: 69
+    address: 0.0.0.0
+
