@@ -1,0 +1,28 @@
+<html>
+<head>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<link rel="stylesheet" href="/static/style.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+
+<div data-role="page">
+<div data-role="panel" id="mypanel">
+	<ul data-role="listview">
+		<li>first</li>
+		<li>second</li>
+	</ul>
+</div><!-- /panel -->
+	<div data-role="header">Header</div>
+	<div role="main" class="ui-content">
+		<h1>H1 title</h1>
+		<h2>H2 title</h2>
+		<p><a href="#mypanel">display panel</a></p>
+	</div>
+	<div data-role="footer">Footer</div>
+</div>
+
+</body>

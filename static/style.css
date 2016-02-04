@@ -1,0 +1,12 @@
+#mypanel {
+	background-color: #404040;
+	border-color: #636262;
+	color: #C1BFBF;
+	text-shadow: none;
+}
+#mypanel li {
+	        background-color: #404040;
+        border-color: #636262;
+        color: #C1BFBF;
+        text-shadow: none; 
+}
