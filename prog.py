@@ -14,6 +14,9 @@ import cStringIO
 import sqlite3
 import tornado.ioloop
 import tornado.web
+import os
+import isc_dhcp_leases.iscdhcpleases
+
 
 def signal_handler(signal, frame):
   tftpserver.stop()
@@ -22,6 +25,38 @@ def signal_handler(signal, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
+class Template:
+  def __init__(self,config):
+    self.config = config['configurations']
+  def getConfigForMac(self,mac):
+    mac = mac.lower()
+    varsar = [a for a in self.config if 'hardwareAddress' in a and  a['hardwareAddress'].lower() == mac]
+    return self._getConfig(varsar)
+  def getConfigForName(self,name):
+    name = name.lower()
+    varsar = [a for a in self.config if 'name' in a and a['name'].lower() == name]
+    return self._getConfig(varsar)
+  def _getConfig(self,varsar):
+    if len(varsar) == 0:
+      logging.error("No configuration found")
+      return None
+    if len(varsar) > 1:
+      logging.warning("Multiple configuration found. Using first one")
+    vars = varsar[0]
+    if not 'template' in vars:
+      return None
+    template = vars['template']
+    if not os.path.exists('templates/'+template):
+      logging.error("Can't find template %s",template)
+      return None
+    with open('templates/'+template) as tf:
+      templateContent = tf.read()
+      for key in vars:
+        templateContent = templateContent.replace('<%s>'%key,str(vars[key]))
+      return templateContent
+    return None
+    
+    
 
 
 class Configuration:
@@ -63,16 +98,30 @@ class Configuration:
     
 
 class TFTPServer:
-  
-  
-  def __init__(self,address="0.0.0.0",port="69",root="/dev/null"):
+  def __init__(self,address="0.0.0.0",port="69",root="/dev/null",leases="/var/lib/dhcp/dhcpd.leases",configurations={}):
     self.address = address
     self.port = port
     self.root = root
     self.running = False
+    self.leases = leases
+    self.configurations = configurations
   
   def _get(self,filename):
-    return cStringIO.StringIO(filename)
+    file = ''
+    logging.error('Serving %s'%filename)
+    if 'network-confg' in filename:
+      for mac in isc_dhcp_leases.iscdhcpleases.IscDhcpLeases(self.leases).get_current():
+        varsar = [a for a in self.configurations if 'hardwareAddress' in a and  a['hardwareAddress'].lower() == mac.lower()]
+        logging.error('%s %d',mac,len(varsar))
+        if len(varsar) >= 1:
+          file += "ip host %s %s\n"%(varsar[0]['name'],varsar[0]['admip'])
+    elif '-confg' in filename:
+      name = filename[:-6]
+      varsar = [a for a in self.configurations if 'name' in a and  a['name'].lower() == name.lower()]
+      logging.error("%s %d"%(name,len(varsar)))
+      if len(varsar) >= 1:
+        file = templates.getConfigForName(name)
+    return cStringIO.StringIO(file)
   
   def _run(self):
     try:
@@ -89,6 +138,8 @@ class TFTPServer:
   
   def stop(self):
     self.server.stop()
+  def setConfig(self,config):
+    self.configurations = config
 
 class ProfileHandler(tornado.web.RequestHandler):
   def get(self):
@@ -127,14 +178,21 @@ class HTTPServer:
 
 logger = logging.getLogger('prog')
 config = Configuration()
+templates = Template(config)
+
 tftpserver = TFTPServer(**config['binding']['tftp'])
+tftpserver.setConfig(config['configurations'])
 httpserver = HTTPServer(**config['binding']['http'])
 
 tftpserver.start()
 httpserver.start()
+time.sleep(1)
 stop_services = False
 while tftpserver.running and httpserver.running and not stop_services:
   time.sleep(1)
+
+logging.error('Stopping all')
+print tftpserver.running,httpserver.running,stop_services
 
 tftpserver.stop()
 httpserver.stop()

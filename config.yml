@@ -8,7 +8,24 @@ binding:
     address: 0.0.0.0
     root: /home/targuan/app/static
   tftp:
-    port: 4242
+    port: 69
     address: 0.0.0.0
-    root: /dev/null
+    root: /home/targuan
+
+configurations:
+  - 
+    hardwareAddress: 00:FE:C8:1B:77:C7
+    template: C3850-C3650_2T-Uplink.conf
+    site: siteb
+    name: siteb1sw1
+    vlanuser: 200
+    vlanvoice: 201
+    port: 24
+    switchcore: sitebcore
+    portcore: Te1/1
+    admip: 1.1.1.10
+    admmask: 255.255.255.0
+    admgwip: 1.1.1.1
+    core1lo0: 1.1.1.2
+    core2lo0: 1.1.1.3
 
