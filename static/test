@@ -16,13 +16,11 @@
 		<li>second</li>
 	</ul>
 </div><!-- /panel -->
-	<div data-role="header">Header</div>
+	<div data-role="header">Configuration</div>
 	<div role="main" class="ui-content">
-		<h1>H1 title</h1>
-		<h2>H2 title</h2>
-		<p><a href="#mypanel">display panel</a></p>
+		<h1>Switchs</h1>
+		<h2>toto</h2>
 	</div>
-	<div data-role="footer">Footer</div>
 </div>
 
 </body>

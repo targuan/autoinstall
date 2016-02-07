@@ -5,8 +5,42 @@
 	text-shadow: none;
 }
 #mypanel li {
-	        background-color: #404040;
+	background-color: #404040;
         border-color: #636262;
         color: #C1BFBF;
         text-shadow: none; 
+}
+
+@media ( min-width: 50em ) {
+
+	/* wrap on wide viewports once open */
+
+	.ui-panel-page-content-open.ui-panel-page-content-position-left {
+		margin-right: 17em;
+	}
+	.ui-panel-page-content-open.ui-panel-page-content-position-right {
+		margin-left: 17em;
+	}
+	.ui-panel-page-content-open {
+		width: auto;
+	}
+
+	/* disable "dismiss" on wide viewports */
+	.ui-panel-dismiss {
+		display: none;
+	}
+
+	/* same as the above but for panels with display mode "push" only */
+    .ui-panel-closed {  
+        width: 17em;
+        clip:auto;
+        visibility: visible;
+    }
+    .ui-panel-wrapper {
+        margin-left: 17em;
+    }
+    .ui-panel-animate.ui-panel-position-left.ui-panel-display-overlay, .ui-panel-animate.ui-panel-position-left.ui-panel-display-push {
+        transform: none;
+    }
+
 }
