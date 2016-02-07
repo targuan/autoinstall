@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import sys
 sys.path.append('lib')
 
@@ -19,7 +21,7 @@ import isc_dhcp_leases.iscdhcpleases
 
 
 def signal_handler(signal, frame):
-  tftpserver.stop()
+  global stop_services
   stop_services = True
 
 
@@ -143,7 +145,8 @@ class TFTPServer:
 
 class ProfileHandler(tornado.web.RequestHandler):
   def get(self):
-    self.write("coucou")
+    global config
+    self.write(yaml.dump(config,default_flow_style=False))
 
 class HTTPServer:
   def __init__(self,address="0.0.0.0",port="8080",root="/dev/null"):

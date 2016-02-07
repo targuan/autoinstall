@@ -1,14 +1,14 @@
 lease: /var/lib/dhcp/dhcpd.leases
 database:
   type: sqlite3
-  file: /var/lib/autoinstall/database.lib
+  file: database.lib
 binding:
   http:
     port: 8080
     address: 0.0.0.0
-    root: /home/targuan/app/static
+    root: static/
   tftp:
-    port: 69
+    port: 6969
     address: 0.0.0.0
     root: /home/targuan
 
