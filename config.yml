@@ -1,6 +1,6 @@
-lease: /var/lib/dhcp/dhcpd.leases
+leases: /var/lib/dhcp/dhcpd.leases
 database:
-  type: sqlite3
+  type: SQLite
   file: database.lib
 binding:
   http:
@@ -28,4 +28,4 @@ configurations:
     admgwip: 1.1.1.1
     core1lo0: 1.1.1.2
     core2lo0: 1.1.1.3
-
+debug: INFO
